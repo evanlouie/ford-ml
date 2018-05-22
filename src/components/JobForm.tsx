@@ -81,6 +81,7 @@ export class JobForm extends React.Component<{}, IJobFormState> {
           </Grid>
           <Grid item xs={12}>
             <Button
+              disabled={!(!!this.state.dataset && !!this.state.model)}
               variant="raised"
               color="primary"
               onClick={async () => {

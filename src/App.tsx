@@ -29,7 +29,7 @@ export class App extends React.Component {
           <Grid container className="App" style={{ padding: "1em" }} spacing={8}>
             <Grid item xs={12}>
               <Paper style={{ padding: "1em" }}>
-                <Grid container spacing={8}>
+                <Grid container spacing={8} style={{ marginBottom: "1em" }}>
                   <Grid item>
                     <Link to="/" style={{ textDecoration: "none" }}>
                       <Button color="primary">Submit Training Job</Button>
