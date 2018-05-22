@@ -1,3 +1,4 @@
+import { Button, Paper, Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
 import * as React from "react";
 import { deploy, getTrainedModels, ITrainedModel } from "../lib/helpers";
 
@@ -15,30 +16,32 @@ export class ModelList extends React.Component<{}, IState> {
   }
   public render() {
     return (
-      <div className="ModelList">
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Score</th>
-              <th />
-            </tr>
-          </thead>
-          <tbody>
+      <Paper className="ModelList">
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell>Score</TableCell>
+              <TableCell />
+            </TableRow>
+          </TableHead>
+          <TableBody>
             {this.state.models.map(model => {
               return (
-                <tr key={model.name + model.score}>
-                  <td>{model.name}</td>
-                  <td>{model.score}</td>
-                  <td>
-                    <button onClick={() => deploy(model)}>Deploy</button>
-                  </td>
-                </tr>
+                <TableRow key={model.name + model.score}>
+                  <TableCell>{model.name}</TableCell>
+                  <TableCell>{model.score}</TableCell>
+                  <TableCell>
+                    <Button color="primary" onClick={() => deploy(model)}>
+                      Deploy
+                    </Button>
+                  </TableCell>
+                </TableRow>
               );
             })}
-          </tbody>
-        </table>
-      </div>
+          </TableBody>
+        </Table>
+      </Paper>
     );
   }
 }

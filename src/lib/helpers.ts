@@ -1,3 +1,5 @@
+import { IJobList } from "./types";
+
 export interface IModel {
   name: string; // base model name
 }
@@ -13,7 +15,10 @@ export interface IDataset {
 
 export interface IJob {
   // @TODO: fill in what a "job" actually has
-  id: string;
+  name: string;
+  status: string; // latest status
+  startTime: string;
+  completionTime: string;
 }
 
 export interface IDeployment {
@@ -43,12 +48,26 @@ export const getDatasets = async (): Promise<IDataset[]> => [
   { directory: "/foo/awe/aewf/aw/aewfawefaaweifjawe" },
 ];
 
-export const getJobs = async (): Promise<IJob[]> => [];
+export const getJobs = async (): Promise<IJob[]> => {
+  const response = await fetch(`/apis/batch/v1/jobs`);
+  const json: IJobList = await response.json();
+  const jobs: IJob[] = json.items!.map(item => {
+    return {
+      completionTime: item.status.completionTime,
+      name: item.metadata.name,
+      startTime: item.status.startTime,
+      status:
+        item.status.conditions!.length > 0 ? item.status.conditions![0].type : "No status found",
+    };
+  });
+  return jobs;
+};
 
 export const getDeployments = async (): Promise<IDeployment[]> => [];
 
-export const train = async (dataset: string, model: string) => {
-  return true;
+export const train = async (dataset: string, model: string): Promise<number> => {
+  console.info(`Submitting training job for dataset ${dataset} using ${model}`);
+  return 123; // Return job-id
 };
 
 export const deploy = async (trainedModel: IModel) => {

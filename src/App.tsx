@@ -1,6 +1,6 @@
+import { AppBar, Button, CssBaseline, Grid, Paper, Toolbar, Typography } from "@material-ui/core";
 import * as React from "react";
 import { BrowserRouter, Link, Route, RouteComponentProps } from "react-router-dom";
-import "./App.css";
 import { JobForm } from "./components/JobForm";
 import { ModelList } from "./components/ModelList";
 
@@ -9,24 +9,45 @@ export class App extends React.Component {
     [route: string]: React.ComponentType<RouteComponentProps<any>> | React.ComponentType<any>;
   } = {
     "/": JobForm,
-    "/model": ModelList,
+    "/jobs": () => <div className="JobList">LIST JOBS</div>,
+    "/jobs/:id": () => <div className="JobView">View Job</div>,
+    "/models": ModelList,
   };
 
   public render() {
     return (
       <BrowserRouter>
-        <div className="App">
-          <header className="App-header">
-            <h1 className="App-title">Welcome to Ford ML</h1>
-          </header>
-          <div>
-            <Link to="/">Submit Training Job</Link>
-            <Link to="/model">Trained Models</Link>
-            {Object.entries(App.exactRoutes).map(([route, component]) => {
-              return <Route key={route} exact path={route} component={component} />;
-            })}
-          </div>
-        </div>
+        <React.Fragment>
+          <CssBaseline />
+          <AppBar position="static">
+            <Toolbar>
+              <Typography variant="title" color="inherit">
+                Ford ML
+              </Typography>
+            </Toolbar>
+          </AppBar>
+          <Grid container className="App" style={{ padding: "1em" }} spacing={8}>
+            <Grid item xs={12}>
+              <Paper style={{ padding: "1em" }}>
+                <Grid container spacing={8}>
+                  <Grid item>
+                    <Link to="/" style={{ textDecoration: "none" }}>
+                      <Button color="primary">Submit Training Job</Button>
+                    </Link>
+                  </Grid>
+                  <Grid item>
+                    <Link to="/models" style={{ textDecoration: "none" }}>
+                      <Button color="secondary">Trained Models</Button>
+                    </Link>
+                  </Grid>
+                </Grid>
+                {Object.entries(App.exactRoutes).map(([route, component]) => {
+                  return <Route key={route} exact path={route} component={component} />;
+                })}
+              </Paper>
+            </Grid>
+          </Grid>
+        </React.Fragment>
       </BrowserRouter>
     );
   }
