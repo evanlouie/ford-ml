@@ -22,8 +22,11 @@ export interface IDeployment {
 }
 
 export const getModels = async (): Promise<IModel[]> => [
-  { name: "foobar" },
-  { name: "oawiejfoawe" },
+  { name: "rcnn" },
+  { name: "other cool model 1" },
+  { name: "other cool model 2" },
+  { name: "other cool model 3" },
+  { name: "other cool model 4" },
 ];
 
 export const getTrainedModels = async (): Promise<ITrainedModel[]> => [
