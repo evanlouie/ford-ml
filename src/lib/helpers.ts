@@ -66,7 +66,11 @@ export const getJobs = async (): Promise<IJob[]> => {
 export const getDeployments = async (): Promise<IDeployment[]> => [];
 
 export const train = async (dataset: string, model: string): Promise<number> => {
-  console.info(`Submitting training job for dataset ${dataset} using ${model}`);
+  const jobName = `${dataset}-${model}`;
+
+  console.info(
+    `Submitting training job for dataset '${dataset}' using '${model}'. Job name: ${jobName}`,
+  );
   return 123; // Return job-id
 };
 

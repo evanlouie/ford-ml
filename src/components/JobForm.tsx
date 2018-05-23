@@ -9,30 +9,28 @@ import {
 } from "@material-ui/core";
 import * as React from "react";
 import { Redirect } from "react-router";
-import { getDatasets, getModels, IDataset, IModel, train } from "../lib/helpers";
+import { IDataset, IModel, train } from "../lib/helpers";
 
 export interface IJobFormState {
   dataset: string;
   model: string;
+  running: boolean;
+}
+
+export interface IJobFormProps {
   datasets: IDataset[];
   models: IModel[];
 }
 
-export class JobForm extends React.Component<{}, IJobFormState> {
+export class JobForm extends React.Component<IJobFormProps, IJobFormState> {
   public state: IJobFormState = {
     dataset: "",
-    datasets: [],
     model: "",
-    models: [],
+    running: false,
   };
 
-  public componentDidMount() {
-    getDatasets().then(datasets => this.setState({ datasets }));
-    getModels().then(models => this.setState({ models }));
-  }
-
   public render() {
-    const { datasets, models } = this.state;
+    const { datasets, models } = this.props;
     return (
       <form className="JobForm">
         <Grid container spacing={8}>
@@ -43,7 +41,7 @@ export class JobForm extends React.Component<{}, IJobFormState> {
             <FormControl>
               <InputLabel htmlFor="dataset-select">Dataset</InputLabel>
               <Select
-                style={{ minWidth: "10em" }}
+                style={{ minWidth: "15em" }}
                 className="JobForm__dataset"
                 onChange={this.updateDataset}
                 value={this.state.dataset}
@@ -64,7 +62,7 @@ export class JobForm extends React.Component<{}, IJobFormState> {
             <FormControl>
               <InputLabel htmlFor="model-select">Model</InputLabel>
               <Select
-                style={{ width: "10em" }}
+                style={{ width: "15em" }}
                 className="JobForm__model"
                 onChange={this.updateModel}
                 value={this.state.model}
@@ -81,11 +79,13 @@ export class JobForm extends React.Component<{}, IJobFormState> {
           </Grid>
           <Grid item xs={12}>
             <Button
-              disabled={!(!!this.state.dataset && !!this.state.model)}
+              disabled={!(!!this.state.dataset && !!this.state.model) || this.state.running}
               variant="raised"
               color="primary"
               onClick={async () => {
+                this.setState({ running: true });
                 const jobId = await train(this.state.dataset, this.state.model);
+                this.setState({ running: false });
                 return <Redirect to={`/jobs/${jobId}`} />;
               }}
             >
